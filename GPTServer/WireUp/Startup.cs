@@ -1,20 +1,21 @@
 using AspNetCoreRateLimit;
-using GPTServer.Api.ContextInfo;
-using GPTServer.Api.GPT;
-using GPTServer.Configurations;
-using GPTServer.Constants;
-using GPTServer.Extensions;
+using GPTServer.Common.Core.Configurations;
+using GPTServer.Common.Core.Constants;
+using GPTServer.Common.Core.ContextInfo;
+using GPTServer.Common.DataAccess.WireUp;
+using GPTServer.Common.DomainLogic.WireUp;
 using GPTServer.Middlewares;
 using GPTServer.Request;
-using GPTServer.Request.HealthCheck;
-using GPTServer.Services.GPT;
+using GPTServer.Web.Extendions;
+using GPTServer.Web.HealthCheck;
+using GPTServer.Web.WireUp;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 using System.IO.Compression;
 
-namespace GPTServer.WireUp; 
+namespace GPTServer.WireUp;
 
 public class Startup
 {
@@ -35,10 +36,6 @@ public class Startup
         services.AddConfiguration<BaseOptions>(Configuration);
         services.AddConfiguration<LogOptions>(Configuration);
 
-        // INFO: Register services
-        services.AddScoped<IGPTService, GPTService>();
-
-        // INFO: Register misc
         // INFO: Cookie policies
         services.Configure<CookiePolicyOptions>(options =>
         {
@@ -69,13 +66,18 @@ public class Startup
 
         services.AddControllers();
         services.AddHttpClient();
+
         services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
         services.AddResponseCompression(options =>
         {
             options.Providers.Add<BrotliCompressionProvider>();
         });
 
+
         services.AddScoped<IContextInfo, ContextInfo>();
+
+        services.AddDataAccess();
+        services.AddDomainLogic();
     }
 
     public virtual void Configure(
@@ -95,6 +97,7 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapCustomHealthChecks();
         });
 
         bool isDevEnv = IsDevelopmentEnvironment();
@@ -109,11 +112,6 @@ public class Startup
 
         // INFO: Must be placed after Cors
         app.UseHttpsRedirection();
-
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapCustomHealthChecks();
-        });
 
         if (!isDevEnv)
         {

@@ -1,4 +1,4 @@
-﻿using GPTServer.Api.ContextInfo;
+﻿using GPTServer.Common.Core.ContextInfo;
 
 namespace GPTServer.Request;
 

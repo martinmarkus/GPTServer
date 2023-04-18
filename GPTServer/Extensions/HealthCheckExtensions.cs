@@ -1,9 +1,9 @@
-﻿using GPTServer.Api.HealthCheck;
+﻿using GPTServer.Common.Core.DTOs.HealthCheck;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 using System.Net.Mime;
 
-namespace GPTServer.Extensions;
+namespace GPTServer.Web.Extendions;
 
 public static class HealthCheckExtensions
 {
