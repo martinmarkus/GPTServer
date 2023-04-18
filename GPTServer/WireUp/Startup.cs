@@ -77,7 +77,7 @@ public class Startup
 
         services.AddScoped<IContextInfo, ContextInfo>();
 
-        services.AddDataAccess();
+        services.AddDataAccess(Configuration);
         services.AddDomainLogic();
     }
 
