@@ -4,18 +4,17 @@ using GPTServer.Common.Core.Constants;
 using GPTServer.Common.Core.ContextInfo;
 using GPTServer.Common.DataAccess.WireUp;
 using GPTServer.Common.DomainLogic.WireUp;
-using GPTServer.Middlewares;
-using GPTServer.Request;
 using GPTServer.Web.Extendions;
 using GPTServer.Web.HealthCheck;
-using GPTServer.Web.WireUp;
+using GPTServer.Web.Middlewares;
+using GPTServer.Web.Request;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 using System.IO.Compression;
 
-namespace GPTServer.WireUp;
+namespace GPTServer.Web.WireUp;
 
 public class Startup
 {
@@ -34,7 +33,10 @@ public class Startup
     {
         // INFO: Register configurations
         services.AddConfiguration<BaseOptions>(Configuration);
+        services.AddConfiguration<CachingOptions>(Configuration);
+        services.AddConfiguration<DbOptions>(Configuration);
         services.AddConfiguration<LogOptions>(Configuration);
+        services.AddConfiguration<SmtpOptions>(Configuration);
 
         // INFO: Cookie policies
         services.Configure<CookiePolicyOptions>(options =>
@@ -72,7 +74,6 @@ public class Startup
         {
             options.Providers.Add<BrotliCompressionProvider>();
         });
-
 
         services.AddScoped<IContextInfo, ContextInfo>();
 

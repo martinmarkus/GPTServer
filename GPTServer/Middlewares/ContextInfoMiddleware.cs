@@ -1,6 +1,6 @@
 ﻿using GPTServer.Common.Core.ContextInfo;
 
-namespace GPTServer.Middlewares;
+namespace GPTServer.Web.Middlewares;
 
 public class ContextInfoMiddleware
 {

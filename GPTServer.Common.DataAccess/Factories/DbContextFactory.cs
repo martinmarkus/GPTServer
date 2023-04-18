@@ -8,14 +8,14 @@ namespace GPTServer.Common.DataAccess.Factories
     /// <summary>
     /// DbContext factory for migration generating. Supports multiple environments and appsettings options.
     /// </summary>
-    public class DbContextFactory : IDesignTimeDbContextFactory<HHDbContext>
+    public class DbContextFactory : IDesignTimeDbContextFactory<DbContexts.GPTDbContext>
     {
-        public HHDbContext CreateDbContext(string[] args)
+        public DbContexts.GPTDbContext CreateDbContext(string[] args)
         {
             var baseOptions = StaticConfigOption.Get<BaseOptions>();
             var dbOptions = StaticConfigOption.Get<DbOptions>();
 
-            DbContextOptionsBuilder<HHDbContext> optionsBuilder = new();
+            DbContextOptionsBuilder<DbContexts.GPTDbContext> optionsBuilder = new();
 
             optionsBuilder
                 .UseSqlServer(
@@ -32,7 +32,7 @@ namespace GPTServer.Common.DataAccess.Factories
             // INFO: Turn off change tracking
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
-            return new HHDbContext(optionsBuilder.Options);
+            return new DbContexts.GPTDbContext(optionsBuilder.Options);
         }
     }
 }

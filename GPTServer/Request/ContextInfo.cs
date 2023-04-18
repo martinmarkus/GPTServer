@@ -1,6 +1,6 @@
 ﻿using GPTServer.Common.Core.ContextInfo;
 
-namespace GPTServer.Request;
+namespace GPTServer.Web.Request;
 
 public class ContextInfo : IContextInfo
 {

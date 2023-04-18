@@ -8,11 +8,10 @@ using Microsoft.Extensions.Options;
 
 namespace GPTServer.Common.DataAccess.DbContexts
 {
-    public class HHDbContext : DbContext
+    public class GPTDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<ApiKey> ApiKeys { get; set; }
-
 
         // INFO: Private fields
         private readonly string _environmentName;
@@ -20,8 +19,8 @@ namespace GPTServer.Common.DataAccess.DbContexts
         //private readonly string _environmentName = StaticConfigOption.GetFromEnvironmentVariable();
 
         // INFO: Constructor for DI
-        public HHDbContext(
-            DbContextOptions<HHDbContext> dbContextOptions,
+        public GPTDbContext(
+            DbContextOptions<GPTDbContext> dbContextOptions,
             IOptions<BaseOptions> options) : base(dbContextOptions)
         {
             _baseOptions = options.Value;
@@ -29,7 +28,7 @@ namespace GPTServer.Common.DataAccess.DbContexts
         }
 
         // INFO: Constructor for IDesignTimeDbContextFactory implementation
-        public HHDbContext(DbContextOptions<HHDbContext> dbContextOptions) : base(dbContextOptions)
+        public GPTDbContext(DbContextOptions<GPTDbContext> dbContextOptions) : base(dbContextOptions)
         {
             _environmentName = EnvironmentMeta.EnvironmentName;
             _baseOptions = StaticConfigOption.Get<BaseOptions>();

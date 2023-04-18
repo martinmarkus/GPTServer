@@ -8,9 +8,9 @@ namespace GPTServer.Common.DataAccess.Transactions
 {
     public class DatabaseTransaction : IDatabaseTransaction
     {
-        private readonly HHDbContext _dbContext;
+        private readonly DbContexts.GPTDbContext _dbContext;
 
-        public DatabaseTransaction(HHDbContext dbContext)
+        public DatabaseTransaction(DbContexts.GPTDbContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -3,7 +3,7 @@ using GPTServer.Common.Core.GPT.DTOs;
 using GPTServer.Common.DomainLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GPTServer.Controllers;
+namespace GPTServer.Web.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]

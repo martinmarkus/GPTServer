@@ -1,6 +1,6 @@
 using Serilog;
 
-namespace GPTServer.WireUp;
+namespace GPTServer.Web.WireUp;
 
 public class Program
 {

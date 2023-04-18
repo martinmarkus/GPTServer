@@ -7,9 +7,9 @@ namespace GPTServer.Common.DataAccess.Repositores
 {
     public abstract class AsyncRepo<T> : IAsyncRepo<T> where T : BaseEntity
     {
-        protected readonly HHDbContext _dbContext;
+        protected readonly DbContexts.GPTDbContext _dbContext;
 
-        protected AsyncRepo(HHDbContext dbContext)
+        protected AsyncRepo(DbContexts.GPTDbContext dbContext)
         {
             _dbContext = dbContext;
         }
