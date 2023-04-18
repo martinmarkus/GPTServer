@@ -2,6 +2,7 @@ using AspNetCoreRateLimit;
 using GPTServer.Common.Core.Configurations;
 using GPTServer.Common.Core.Constants;
 using GPTServer.Common.Core.ContextInfo;
+using GPTServer.Common.DataAccess.DbContexts;
 using GPTServer.Common.DataAccess.WireUp;
 using GPTServer.Common.DomainLogic.WireUp;
 using GPTServer.Web.Extendions;
@@ -11,6 +12,7 @@ using GPTServer.Web.Request;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.IO.Compression;
 
@@ -84,7 +86,8 @@ public class Startup
     public virtual void Configure(
         IApplicationBuilder app,
         IWebHostEnvironment env,
-        IServiceScopeFactory serviceScopeFactory)
+        IServiceScopeFactory serviceScopeFactory,
+        GPTDbContext dbContext)
     {
         app.UseIpRateLimiting();
         app.UseSerilogRequestLogging();
@@ -123,6 +126,8 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
         }
+
+        dbContext.Database.Migrate();
     }
 
     protected virtual bool IsDevelopmentEnvironment() =>
