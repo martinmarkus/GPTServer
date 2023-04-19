@@ -5,9 +5,9 @@ using GPTServer.Common.DataAccess.Repositories.Interfaces;
 
 namespace GPTServer.Common.DataAccess.Repositories;
 
-public class UserRepo : AsyncRepo<User>, IUserRepo
+public class LogRepo : AsyncRepo<Log>, ILogRepo
 {
-    public UserRepo(GPTDbContext dbContext) : base(dbContext)
-    {
-    }
+	public LogRepo(GPTDbContext dbContext) : base(dbContext)
+	{
+	}
 }

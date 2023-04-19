@@ -9,12 +9,16 @@ using GPTServer.Web.Extendions;
 using GPTServer.Web.HealthCheck;
 using GPTServer.Web.Middlewares;
 using GPTServer.Web.Request;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.IO.Compression;
+using System.Text;
 
 namespace GPTServer.Web.WireUp;
 
@@ -33,8 +37,19 @@ public class Startup
 
     public virtual void ConfigureServices(IServiceCollection services)
     {
-        // INFO: Register configurations
-        services.AddConfiguration<BaseOptions>(Configuration);
+		var baseSection = Configuration.GetSection(nameof(BaseOptions));
+		var baseOptions = baseSection.Get<BaseOptions>();
+
+        if (baseOptions is null
+            || string.IsNullOrEmpty(baseOptions.AppName)
+            || string.IsNullOrEmpty(baseOptions.AuthIssuer)
+            || string.IsNullOrEmpty(baseOptions.AuthSecretKey))
+        {
+            throw new Exception();
+        }
+
+		// INFO: Register configurations
+		services.AddConfiguration<BaseOptions>(Configuration);
         services.AddConfiguration<CachingOptions>(Configuration);
         services.AddConfiguration<DbOptions>(Configuration);
         services.AddConfiguration<LogOptions>(Configuration);
@@ -79,7 +94,31 @@ public class Startup
 
         services.AddScoped<IContextInfo, ContextInfo>();
 
-        services.AddDataAccess(Configuration);
+		services.AddAuthentication(oOptions =>
+			{
+				oOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				oOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+				// INFO: Default auth with UserAuthHandler
+				oOptions.DefaultAuthenticateScheme = AuthSchemeConstants.UserAuthScheme;
+			})
+			.AddJwtBearer(oOptions =>
+			{
+				oOptions.SaveToken = true;
+				oOptions.TokenValidationParameters = new TokenValidationParameters
+				{
+					RequireExpirationTime = false,
+					ValidateLifetime = false,
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(baseOptions.AuthSecretKey)),
+					ValidateIssuer = true,
+					ValidIssuer = baseOptions.AuthIssuer,
+					ValidateAudience = false
+				};
+			})
+			.AddScheme<UserAuthSchemeOptions, UserAuthHandler>(AuthSchemeConstants.UserAuthScheme, options => { });
+
+		services.AddDataAccess(Configuration);
         services.AddDomainLogic();
     }
 

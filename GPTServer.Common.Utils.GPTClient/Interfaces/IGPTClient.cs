@@ -1,6 +1,9 @@
-﻿namespace GPTServer.Api.Clients;
+﻿using GPTServer.Common.Utils.GPTClient.DataObjects;
+using OpenAI.Completions;
+
+namespace GPTServer.Api.Clients;
 
 public interface IGPTClient
 {
-    Task CreateCompletionAsync(string apiKey, string organization);
+    Task<GPTCompletionResponse> CreateCompletionAsync(GPTCompletionRequest request);
 }

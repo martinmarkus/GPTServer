@@ -2,7 +2,7 @@
 using GPTServer.Common.DataAccess.Repositores.Interfaces;
 
 namespace GPTServer.Common.DataAccess.Repositories.Interfaces;
-public interface IApiKeyRepo : IAsyncRepo<ApiKey>
+
+public interface IClientIPRepo : IAsyncRepo<ClientIP>
 {
-	Task<string> GetActiveApiKeyAsync(Guid userId);
 }

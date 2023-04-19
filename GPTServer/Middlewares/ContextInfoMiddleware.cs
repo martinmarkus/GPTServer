@@ -1,4 +1,6 @@
-﻿using GPTServer.Common.Core.ContextInfo;
+﻿using GPTServer.Common.Core.Constants;
+using GPTServer.Common.Core.ContextInfo;
+using GPTServer.Web.Extensions;
 
 namespace GPTServer.Web.Middlewares;
 
@@ -15,7 +17,14 @@ public class ContextInfoMiddleware
         HttpContext httpContext,
         IContextInfo contextInfo)
     {
-        // INFO: Fill ContextInfo
-        await _next(httpContext);
+        contextInfo.UserId = Guid.TryParse(httpContext.GetFirstHeaderValueOrDefault(ContextInfoConstants.UserIdKey, ContextInfoConstants.UserIdValue), out Guid userId) ? userId : null;
+
+		contextInfo.Email = httpContext.GetFirstHeaderValueOrDefault(ContextInfoConstants.EmailKey, ContextInfoConstants.EmailValue);
+        contextInfo.AuthToken = httpContext.GetFirstHeaderValueOrDefault(ContextInfoConstants.AuthTokenKey, ContextInfoConstants.AuthTokenValue);
+        contextInfo.ClientIP = httpContext.GetFirstHeaderValueOrDefault(ContextInfoConstants.ClientIPKey, ContextInfoConstants.ClientIPValue);
+        contextInfo.UserAgent = httpContext.GetFirstHeaderValueOrDefault(ContextInfoConstants.UserAgentKey, ContextInfoConstants.UserAgentValue);
+        contextInfo.Language = httpContext.GetFirstHeaderValueOrDefault(ContextInfoConstants.LanguageKey, ContextInfoConstants.LanguageValue);
+
+		await _next(httpContext);
     }
 }

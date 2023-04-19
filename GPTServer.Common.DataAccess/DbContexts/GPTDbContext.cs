@@ -12,6 +12,9 @@ namespace GPTServer.Common.DataAccess.DbContexts
     {
         public DbSet<User> Users { get; set; }
         public DbSet<ApiKey> ApiKeys { get; set; }
+        public DbSet<ClientIP> ClientIPs { get; set; }
+        public DbSet<Log> Logs { get; set; }
+        public DbSet<AdminKey> AdminKeys { get; set; }
 
         // INFO: Private fields
         private readonly string _environmentName;
@@ -52,8 +55,18 @@ namespace GPTServer.Common.DataAccess.DbContexts
                 .WithOne(x => x.User)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Define indexes
-            modelBuilder.DefineIndexes();
+			modelBuilder.Entity<User>()
+		        .HasMany(x => x.ClienIPs)
+		        .WithOne(x => x.User)
+		        .OnDelete(DeleteBehavior.Cascade);
+			
+            modelBuilder.Entity<User>()
+				.HasMany(x => x.GPTInteractions)
+				.WithOne(x => x.User)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			// Define indexes
+			modelBuilder.DefineIndexes();
 
             // Add initial data
             modelBuilder.AddInitialData();

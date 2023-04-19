@@ -32,3 +32,9 @@ public class Program
         }
     }
 }
+
+// functions:
+// - add user (generate custom key, save IP, save GPT API key)
+// - update user -||-
+// - extension auth: send custom key -> save IP -> return jwt with actual IP claim
+// - chatting: with valid JWT

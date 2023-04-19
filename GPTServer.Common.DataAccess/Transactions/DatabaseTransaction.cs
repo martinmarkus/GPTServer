@@ -1,5 +1,4 @@
 ﻿using GPTServer.Common.Core.DataObjects;
-using GPTServer.Common.DataAccess.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
@@ -30,7 +29,7 @@ namespace GPTServer.Common.DataAccess.Transactions
             var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
             await executionStrategy.ExecuteAsync(async () =>
             {
-                IDbContextTransaction transaction = default;
+				IDbContextTransaction transaction = default;
                 try
                 {
                     transaction = await _dbContext.Database.BeginTransactionAsync(isolationLevel);

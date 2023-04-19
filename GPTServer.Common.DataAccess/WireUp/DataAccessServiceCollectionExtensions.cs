@@ -42,8 +42,14 @@ namespace GPTServer.Common.DataAccess.WireUp
 
 
             services.AddScoped<IDatabaseTransaction, DatabaseTransaction>();
+
+            // INFO: Repos
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped<IApiKeyRepo, ApiKeyRepo>();
+            services.AddScoped<ILogRepo, LogRepo>();
+            services.AddScoped<IClientIPRepo, ClientIPRepo>();
+            services.AddScoped<IAdminKeyRepo, AdminKeyRepo>();
+            services.AddScoped<IGPTInteractionRepo, GPTInteractionRepo>();
         }
     }
 }

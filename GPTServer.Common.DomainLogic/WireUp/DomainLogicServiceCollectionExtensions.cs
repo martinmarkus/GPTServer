@@ -14,6 +14,9 @@ public static class DomainLogicServiceCollectionExtensions
     public static void AddDomainLogic(this IServiceCollection services)
     {
         services.AddScoped<IGPTService, GPTService>();
+        services.AddScoped<ILogService, LogService>();
+        services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IAuthService, AuthService>();
 
         services.AddGPTClient();
     }

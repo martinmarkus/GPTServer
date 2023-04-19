@@ -4,10 +4,9 @@ using GPTServer.Common.DataAccess.Repositores;
 using GPTServer.Common.DataAccess.Repositories.Interfaces;
 
 namespace GPTServer.Common.DataAccess.Repositories;
-
-public class UserRepo : AsyncRepo<User>, IUserRepo
+public class AdminKeyRepo : AsyncRepo<AdminKey>, IAdminKeyRepo
 {
-    public UserRepo(GPTDbContext dbContext) : base(dbContext)
-    {
-    }
+	public AdminKeyRepo(GPTDbContext dbContext) : base(dbContext)
+	{
+	}
 }

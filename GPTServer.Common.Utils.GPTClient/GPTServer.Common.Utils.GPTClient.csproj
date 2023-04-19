@@ -12,9 +12,4 @@
     <PackageReference Include="OpenAI-DotNet" Version="6.7.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\GPTServer.Common.Core\GPTServer.Common.Core.csproj" />
-    <ProjectReference Include="..\GPTServer.Common.Utils\GPTServer.Common.Utils.GeneralUtils.csproj" />
-  </ItemGroup>
-
 </Project>

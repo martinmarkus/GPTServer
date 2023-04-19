@@ -1,6 +1,7 @@
 using GPTServer.Common.Core.DTOs.GPT;
 using GPTServer.Common.Core.GPT.DTOs;
 using GPTServer.Common.DomainLogic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GPTServer.Web.Controllers;
@@ -17,6 +18,7 @@ public class GPTController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<GPTAnswerResponseDTO> GetGPTAnswerAsync(GPTQuestionRequestDTO @params) =>
         await _gptService.GetGPTAnswerAsync(@params);
 }

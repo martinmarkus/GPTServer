@@ -1,6 +1,9 @@
-﻿namespace GPTServer.Common.Core.DTOs.GPT;
+﻿using GPTServer.Common.Core.DTOs.General;
 
-public class GPTAnswerResponseDTO
+namespace GPTServer.Common.Core.DTOs.GPT;
+
+public class GPTAnswerResponseDTO : BaseResponseDTO
 {
+    public string ResponseMessage { get; set; }
 }
 

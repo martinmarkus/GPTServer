@@ -4,10 +4,9 @@ using GPTServer.Common.DataAccess.Repositores;
 using GPTServer.Common.DataAccess.Repositories.Interfaces;
 
 namespace GPTServer.Common.DataAccess.Repositories;
-
-public class UserRepo : AsyncRepo<User>, IUserRepo
+public class ClientIPRepo : AsyncRepo<ClientIP>, IClientIPRepo
 {
-    public UserRepo(GPTDbContext dbContext) : base(dbContext)
-    {
-    }
+	public ClientIPRepo(GPTDbContext dbContext) : base(dbContext)
+	{
+	}
 }
