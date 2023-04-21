@@ -35,7 +35,7 @@ public class GPTService : IGPTService
 
 	public async Task<GPTAnswerResponseDTO> GetGPTAnswerAsync(GPTQuestionRequestDTO @params)
     {
-		string apiKey = await _apiKeyRepo.GetActiveApiKeyAsync(_contextInfo.UserId);
+		string apiKey = await _apiKeyRepo.GetActiveApiKeyAsync(_contextInfo.UserId.HasValue ? _contextInfo.UserId.Value : default);
 
 		if (string.IsNullOrEmpty(apiKey.Trim()))
 		{

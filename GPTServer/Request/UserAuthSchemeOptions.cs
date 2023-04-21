@@ -1,5 +1,7 @@
-﻿namespace GPTServer.Web.Request;
+﻿using Microsoft.AspNetCore.Authentication;
 
-public class UserAuthSchemeOptions
+namespace GPTServer.Web.Request;
+
+public class UserAuthSchemeOptions : AuthenticationSchemeOptions
 {
 }

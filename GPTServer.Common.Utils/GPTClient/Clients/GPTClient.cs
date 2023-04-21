@@ -2,7 +2,6 @@
 using GPTServer.Common.Utils.GPTClient.DataObjects;
 using OpenAI_API;
 using OpenAI_API.Completions;
-using Org.BouncyCastle.Asn1.Crmf;
 
 namespace GPTServer.Clients.GPT;
 

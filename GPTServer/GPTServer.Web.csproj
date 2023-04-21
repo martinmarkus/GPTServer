@@ -21,6 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GPTServer.Common.DomainLogic\GPTServer.Common.DomainLogic.csproj" />
+    <ProjectReference Include="..\GPTServer.Common.Utils\GeneralUtils\GPTServer.Common.Utils.GeneralUtils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="appsettings.Development.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

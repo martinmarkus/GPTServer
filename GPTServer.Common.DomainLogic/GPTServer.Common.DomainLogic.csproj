@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GPTServer.Common.DataAccess\GPTServer.Common.DataAccess.csproj" />
     <ProjectReference Include="..\GPTServer.Common.Utils\GeneralUtils\GPTServer.Common.Utils.GeneralUtils.csproj" />
     <ProjectReference Include="..\GPTServer.Common.Utils\GPTClient\GPTServer.Common.Utils.GPTClient.csproj" />
   </ItemGroup>
