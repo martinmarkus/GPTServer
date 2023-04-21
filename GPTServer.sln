@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{5E7C47
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPTServer.Common.Core", "GPTServer.Common.Core\GPTServer.Common.Core.csproj", "{D0F30FED-6351-425A-BEDD-52B830B87072}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPTServer.Common.Utils.GeneralUtils", "GPTServer.Common.Utils\GPTServer.Common.Utils.GeneralUtils.csproj", "{EDE20E49-8BEA-4EB8-A1A5-493219F43323}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPTServer.Common.Utils.GeneralUtils", "GPTServer.Common.Utils\GeneralUtils\GPTServer.Common.Utils.GeneralUtils.csproj", "{EDE20E49-8BEA-4EB8-A1A5-493219F43323}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPTServer.Common.DataAccess", "GPTServer.Common.DataAccess\GPTServer.Common.DataAccess.csproj", "{30691AC9-FDBD-455E-85A5-5F683EEC48DF}"
 EndProject
@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPTServer.Common.DomainLogi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{41B5CB4D-0489-4731-B0C0-0C78B303A2FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPTServer.Common.Utils.GPTClient", "GPTServer.Common.Utils.GPTClient\GPTServer.Common.Utils.GPTClient.csproj", "{8496AE3F-A10B-4B77-A9EE-CD6D09A90B28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPTServer.Common.Utils.GPTClient", "GPTServer.Common.Utils\GPTClient\GPTServer.Common.Utils.GPTClient.csproj", "{8496AE3F-A10B-4B77-A9EE-CD6D09A90B28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
