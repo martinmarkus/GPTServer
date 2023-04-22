@@ -62,6 +62,11 @@ public class ApiKeyRepo : AsyncRepo<ApiKey>, IApiKeyRepo
                    && x.UserId == userId.Value
                    && string.Equals(x.Key.Trim(), apiKey.Trim()));
 
+            if (newActiveKey is null)
+            {
+                throw new Exception();
+            }
+
             // INFO: Set the new active key
             newActiveKey.IsActive = true;
             await UpdateAsync(newActiveKey);
