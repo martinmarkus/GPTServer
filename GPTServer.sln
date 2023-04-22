@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPTServer.Web", "GPTServer\GPTServer.Web.csproj", "{06A33D6D-5EEC-4C17-9CEB-40FFD7AD05DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPTServer.Web", "GPTServer.Web\GPTServer.Web.csproj", "{06A33D6D-5EEC-4C17-9CEB-40FFD7AD05DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{5E7C476C-D5DE-43BE-8657-DC8DE804A373}"
 EndProject
