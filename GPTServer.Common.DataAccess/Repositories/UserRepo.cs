@@ -31,7 +31,8 @@ public class UserRepo : AsyncRepo<User>, IUserRepo
                 LastAuthRoutingEnv = x.LastAuthRoutingEnv ?? string.Empty,
                 PasswordHash = x.PasswordHash,
                 PasswordSalt = x.PasswordSalt,
-                ApiKey = x.ApiKeys.FirstOrDefault(key => key.IsActive)
+                ApiKey = x.ApiKeys.FirstOrDefault(key => key.IsActive),
+                HasExtensionPermission = x.HasExtensionPermission
             })
             .FirstOrDefaultAsync();
 

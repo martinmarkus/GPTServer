@@ -9,6 +9,7 @@ using GPTServer.Web.Extendions;
 using GPTServer.Web.HealthCheck;
 using GPTServer.Web.Middlewares;
 using GPTServer.Web.Request;
+using GPTServer.Web.Request.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -93,6 +94,8 @@ public class Startup
         });
 
         services.AddScoped<IContextInfo, ContextInfo>();
+        services.AddScoped<ExtensionPermission>();
+        services.AddScoped<AuthorizeApiKey>();
 
         services.AddTransient<JwtSecurityTokenHandler>();
 
@@ -138,6 +141,7 @@ public class Startup
                     }
                 };
             });
+
         services.AddCustomSwagger();
         services.AddDataAccess(Configuration);
         services.AddDomainLogic();

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GPTServer.Common.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -130,6 +130,30 @@ namespace GPTServer.Common.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_api_keys_IsDeleted_Id",
+                table: "api_keys",
+                columns: new[] { "IsDeleted", "Id" })
+                .Annotation("SqlServer:Clustered", false);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_api_keys_IsDeleted_UserId",
+                table: "api_keys",
+                columns: new[] { "IsDeleted", "UserId" })
+                .Annotation("SqlServer:Clustered", false);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_api_keys_IsDeleted_UserId_IsActive",
+                table: "api_keys",
+                columns: new[] { "IsDeleted", "UserId", "IsActive" })
+                .Annotation("SqlServer:Clustered", false);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_api_keys_IsDeleted_UserId_Key",
+                table: "api_keys",
+                columns: new[] { "IsDeleted", "UserId", "Key" })
+                .Annotation("SqlServer:Clustered", false);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_api_keys_UserId",
                 table: "api_keys",
                 column: "UserId");
@@ -145,9 +169,15 @@ namespace GPTServer.Common.DataAccess.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_Email_IsDeleted",
+                name: "IX_users_IsDeleted_Email",
                 table: "users",
-                columns: new[] { "Email", "IsDeleted" })
+                columns: new[] { "IsDeleted", "Email" })
+                .Annotation("SqlServer:Clustered", false);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_IsDeleted_Id",
+                table: "users",
+                columns: new[] { "IsDeleted", "Id" })
                 .Annotation("SqlServer:Clustered", false);
         }
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GPTServer.Common.DataAccess.Migrations
 {
     [DbContext(typeof(GPTDbContext))]
-    [Migration("20230422111047_Initial")]
-    partial class Initial
+    [Migration("20230422210655_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,6 +79,22 @@ namespace GPTServer.Common.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("IsDeleted", "Id");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("IsDeleted", "Id"), false);
+
+                    b.HasIndex("IsDeleted", "UserId");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("IsDeleted", "UserId"), false);
+
+                    b.HasIndex("IsDeleted", "UserId", "IsActive");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("IsDeleted", "UserId", "IsActive"), false);
+
+                    b.HasIndex("IsDeleted", "UserId", "Key");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("IsDeleted", "UserId", "Key"), false);
 
                     b.ToTable("api_keys");
                 });
@@ -228,9 +244,13 @@ namespace GPTServer.Common.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email", "IsDeleted");
+                    b.HasIndex("IsDeleted", "Email");
 
-                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("Email", "IsDeleted"), false);
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("IsDeleted", "Email"), false);
+
+                    b.HasIndex("IsDeleted", "Id");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("IsDeleted", "Id"), false);
 
                     b.ToTable("users");
                 });

@@ -36,9 +36,9 @@ public class GPTService : IGPTService
 
     public async Task<GPTAnswerResponseDTO> GetGPTAnswerAsync(GPTQuestionRequestDTO @params)
     {
-        var apiKey = await _apiKeyRepo.GetActiveApiKeyAsync(_contextInfo.UserId.HasValue ? _contextInfo.UserId.Value : default);
+        var apiKeys = await _apiKeyRepo.GetActiveApiKeysAsync(_contextInfo.UserId.HasValue ? _contextInfo.UserId.Value : default);
 
-        if (string.IsNullOrEmpty(apiKey.Key.Trim()))
+        if (apiKeys is null || apiKeys.Count == 0)
         {
             await _logService.LogAsync(new Core.Models.Log()
             {
@@ -104,15 +104,15 @@ public class GPTService : IGPTService
             };
         }
 
+        // INFO: Auto-select the first key as new active
+        await _apiKeyRepo.AutoSelectNewActiveKeyAsync(_contextInfo.UserId);
+
         // INFO: If the active key will be deleted
         if (existingApiKey.IsActive)
         {
             // INFO: Remove the active state
             existingApiKey.IsActive = false;
             await _apiKeyRepo.UpdateAsync(existingApiKey);
-
-            // INFO: Auto-select the first key as new active
-            await _apiKeyRepo.AutoSelectNewActiveKeyAsync(_contextInfo.UserId);
         }
 
         // INFO: Remove the key
@@ -144,6 +144,18 @@ public class GPTService : IGPTService
             return new()
             {
                 ResponseType = Core.Enums.ResponseType.MissingParam,
+            };
+        }
+
+        var existingKey = await _apiKeyRepo.GetByApiKeyAsync(
+            _contextInfo.UserId.HasValue ? _contextInfo.UserId.Value : default,
+            dto.ApiKey);
+
+        if (existingKey is not null)
+        {
+            return new()
+            {
+                ResponseType = Core.Enums.ResponseType.Conflict,
             };
         }
 

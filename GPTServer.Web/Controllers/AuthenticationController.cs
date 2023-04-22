@@ -1,6 +1,7 @@
 ﻿using GPTServer.Common.Core.DTOs.Authentication;
 using GPTServer.Common.Core.DTOs.General;
 using GPTServer.Common.DomainLogic.Interfaces;
+using GPTServer.Web.Request.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GPTServer.Web.Controllers;
@@ -25,6 +26,7 @@ public class AuthenticationController : ControllerBase
         await _authService.RegisterAsync(dto);
 
     [HttpPost]
+    [ServiceFilter(typeof(AuthorizeApiKey))]
     public async Task<BaseResponseDTO> ConfirmCustomerAsync(ConfirmCustomerRequestDTO dto) =>
         await _authService.ConfirmCustomerAsync(dto);
 }

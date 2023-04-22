@@ -16,8 +16,15 @@ namespace GPTServer.Common.DataAccess.Extensions
 
         public static void DefineIndexes(this ModelBuilder modelBuilder)
         {
-            // INFO: Non clustered indexes
-            modelBuilder.AddNonClusteredIndex<User>(nameof(User.Email), nameof(User.IsDeleted));
+            // INFO: ApiKey
+            modelBuilder.AddNonClusteredIndex<ApiKey>(nameof(ApiKey.IsDeleted), nameof(ApiKey.Id));
+            modelBuilder.AddNonClusteredIndex<ApiKey>(nameof(ApiKey.IsDeleted), nameof(ApiKey.UserId));
+            modelBuilder.AddNonClusteredIndex<ApiKey>(nameof(ApiKey.IsDeleted), nameof(ApiKey.UserId), nameof(ApiKey.IsActive));
+            modelBuilder.AddNonClusteredIndex<ApiKey>(nameof(ApiKey.IsDeleted), nameof(ApiKey.UserId), nameof(ApiKey.Key));
+
+            // INFO: User
+            modelBuilder.AddNonClusteredIndex<User>(nameof(User.IsDeleted), nameof(User.Id));
+            modelBuilder.AddNonClusteredIndex<User>(nameof(User.IsDeleted), nameof(User.Email));
         }
 
         private static void AddNonClusteredIndex<T>(
