@@ -1,5 +1,4 @@
 using GPTServer.Common.Core.DTOs.GPT;
-using GPTServer.Common.Core.GPT.DTOs;
 using GPTServer.Common.DomainLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +18,21 @@ public class GPTController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<GPTAnswerResponseDTO> GetGPTAnswerAsync(GPTQuestionRequestDTO @params) =>
-        await _gptService.GetGPTAnswerAsync(@params);
+    public async Task<ApiKeysResponseDTO> GetOwnApiKeysAsync() =>
+        await _gptService.GetOwnApiKeysAsync();
+
+    [HttpPost]
+    [Authorize]
+    public async Task SetActiveApiKeyAsync(ApiKeyRequestDTO dto) =>
+        await _gptService.SetActiveApiKeyAsync(dto);
+
+    [HttpPost]
+    [Authorize]
+    public async Task AddApiKeyAsync(ApiKeyRequestDTO dto) =>
+    await _gptService.AddActiveApiKeyAsync(dto);
+
+    [HttpPost]
+    [Authorize]
+    public async Task RemoveApiKeyAsync(ApiKeyRequestDTO dto) =>
+        await _gptService.RemoveApiKeyAsync(dto);
 }

@@ -2,8 +2,10 @@
 using GPTServer.Common.Core.Configurations;
 using GPTServer.Common.Core.Constants;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Serilog;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace GPTServer.Web.WireUp;
 
@@ -92,6 +94,39 @@ public static class WireUpExtensions
 
         services.Configure<T>(section);
         services.AddSingleton(options);
+    }
+
+    public static void AddCustomSwagger(this IServiceCollection services)
+    {
+        services.AddSwaggerDocument(config =>
+        {
+            config.AddSecurity("Bearer", new NSwag.OpenApiSecurityScheme
+            {
+                Description = "JWT Authorization header using the Bearer scheme.",
+                Name = "Authorization",
+                In = NSwag.OpenApiSecurityApiKeyLocation.Header,
+                Type = NSwag.OpenApiSecuritySchemeType.ApiKey,
+                Scheme = "bearer",
+            });
+
+            config.PostProcess = document =>
+            {
+                document.Info.Version = "v1";
+                document.Info.Title = "GPTServer";
+                document.Info.Description = "ASP.NET Web API";
+            };
+        });
+    }
+
+    public static void UseCustomSwagger(this IApplicationBuilder app)
+    {
+        app.UseOpenApi();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "GPTServer");
+            c.DocExpansion(DocExpansion.None);
+            c.RoutePrefix = string.Empty;
+        });
     }
 
 }

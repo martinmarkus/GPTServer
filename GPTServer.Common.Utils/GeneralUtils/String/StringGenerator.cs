@@ -30,6 +30,9 @@ public static class StringGenerator
     public static string GetRandomNumericString(int length = 8) =>
         GetRandomString(length, NumericChars);
 
+    public static string GetRandomAlphanumericString(int length = 8) =>
+        GetRandomString(length, $"{AlphabeticChars}{NumericChars}");
+
     public static string GetRandomString(int length = 8, string chars = "")
     {
         string randomString = Convert.ToBase64String(RandomNumberGenerator.GetBytes(length * 10)).ToUpper();
@@ -43,7 +46,7 @@ public static class StringGenerator
             .Where(x => chars.Contains(x))
             .ToList();
 
-        string matchingString = string.Join(string.Empty, matchingStringList)[..4];
+        string matchingString = string.Join(string.Empty, matchingStringList)[..length];
 
         return matchingString;
     }

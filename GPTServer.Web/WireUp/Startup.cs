@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
 using System.Text;
 
@@ -36,8 +37,8 @@ public class Startup
 
     public virtual void ConfigureServices(IServiceCollection services)
     {
-		var baseSection = Configuration.GetSection(nameof(BaseOptions));
-		var baseOptions = baseSection.Get<BaseOptions>();
+        var baseSection = Configuration.GetSection(nameof(BaseOptions));
+        var baseOptions = baseSection.Get<BaseOptions>();
 
         if (baseOptions is null
             || string.IsNullOrEmpty(baseOptions.AppName)
@@ -47,8 +48,8 @@ public class Startup
             throw new Exception();
         }
 
-		// INFO: Register configurations
-		services.AddConfiguration<BaseOptions>(Configuration);
+        // INFO: Register configurations
+        services.AddConfiguration<BaseOptions>(Configuration);
         services.AddConfiguration<CachingOptions>(Configuration);
         services.AddConfiguration<DbOptions>(Configuration);
         services.AddConfiguration<LogOptions>(Configuration);
@@ -93,31 +94,52 @@ public class Startup
 
         services.AddScoped<IContextInfo, ContextInfo>();
 
-		services.AddAuthentication(oOptions =>
-			{
-				oOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-				oOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        services.AddTransient<JwtSecurityTokenHandler>();
 
-				// INFO: Default auth with UserAuthHandler
-				oOptions.DefaultAuthenticateScheme = AuthSchemeConstants.UserAuthScheme;
-			})
-			.AddJwtBearer(oOptions =>
-			{
-				oOptions.SaveToken = true;
-				oOptions.TokenValidationParameters = new TokenValidationParameters
-				{
-					RequireExpirationTime = false,
-					ValidateLifetime = false,
-					ValidateIssuerSigningKey = true,
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(baseOptions.AuthSecretKey)),
-					ValidateIssuer = true,
-					ValidIssuer = baseOptions.AuthIssuer,
-					ValidateAudience = false
-				};
-			})
-			.AddScheme<UserAuthSchemeOptions, UserAuthHandler>(AuthSchemeConstants.UserAuthScheme, options => { });
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(baseOptions.AuthSecretKey)),
+                    ValidateIssuer = false,
+                    ValidIssuer = baseOptions.AuthIssuer,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        string bearerToken = context.Request.Headers[CookieConstants.AuthToken].ToString() ?? string.Empty;
+                        if (bearerToken.Contains(" "))
+                        {
+                            bearerToken = bearerToken.Split(" ")[1];
+                        }
 
-		services.AddDataAccess(Configuration);
+                        context.Token = bearerToken;
+                        return Task.CompletedTask;
+                    },
+                    OnAuthenticationFailed = context =>
+                    {
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+        services.AddCustomSwagger();
+        services.AddDataAccess(Configuration);
         services.AddDomainLogic();
     }
 
@@ -133,16 +155,24 @@ public class Startup
         // INFO: Middlewares
         app.UseMiddleware<ContextInfoMiddleware>();
 
+        app.UseAuthentication();
         app.UseRouting();
-        app.UseCookiePolicy();
-        app.UseResponseCompression();
+        app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
             endpoints.MapCustomHealthChecks();
         });
 
+        app.UseCookiePolicy();
+        app.UseResponseCompression();
+
         bool isDevEnv = IsDevelopmentEnvironment();
+
+        if (isDevEnv)
+        {
+            app.UseCustomSwagger();
+        }
 
         // INFO: For nginx hosting
         app.UseForwardedHeaders(new ForwardedHeadersOptions

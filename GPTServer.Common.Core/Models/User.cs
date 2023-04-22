@@ -11,15 +11,31 @@ public class User : BaseEntity
     public string Email { get; set; }
 
     [Required]
+    [MaxLength(128)]
+    public string PasswordHash { get; set; }
+
+    [Required]
+    [MaxLength(128)]
+    public string PasswordSalt { get; set; }
+
+    [Required]
     [MaxLength(36)]
     public string UniqueId { get; set; }
 
-	[MaxLength(400)]
-	public string UserAgent { get; set; } = string.Empty;
+    [MaxLength(400)]
+    public string UserAgent { get; set; } = string.Empty;
 
-	public virtual ICollection<ApiKey> ApiKeys { get; set; }
+    public string LastAuthRoutingEnv { get; set; }
+
+    [Required]
+    public bool HasExtensionPermission { get; set; }
+
+    [Required]
+    public DateTime LastAuthDate { get; set; }
+
+    public virtual ICollection<ApiKey> ApiKeys { get; set; }
 
     public virtual ICollection<ClientIP> ClienIPs { get; set; }
-    
+
     public virtual ICollection<GPTInteraction> GPTInteractions { get; set; }
 }

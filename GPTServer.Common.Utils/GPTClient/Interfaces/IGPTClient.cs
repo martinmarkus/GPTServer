@@ -1,7 +1,6 @@
 ﻿using GPTServer.Common.Utils.GPTClient.DataObjects;
-using OpenAI.Completions;
 
-namespace GPTServer.Api.Clients;
+namespace GPTServer.Common.Utils.GPTClient.Interfaces;
 
 public interface IGPTClient
 {

@@ -1,18 +1,12 @@
-﻿using GPTServer.Api.Clients;
-using GPTServer.Common.Utils.GPTClient.DataObjects;
+﻿using GPTServer.Common.Utils.GPTClient.DataObjects;
+using GPTServer.Common.Utils.GPTClient.Interfaces;
 using OpenAI_API;
 using OpenAI_API.Completions;
 
-namespace GPTServer.Clients.GPT;
+namespace GPTServer.Common.Utils.GPTClient.Clients;
 
-public class GPTClient : IGPTClient
+public class DefaultGPTClient : IGPTClient
 {
-
-    public GPTClient()
-    {
-
-    }
-
     public async Task<GPTCompletionResponse> CreateCompletionAsync(GPTCompletionRequest request)
     {
         if (request is null)
@@ -21,7 +15,7 @@ public class GPTClient : IGPTClient
         }
 
         var api = new OpenAIAPI(new APIAuthentication(request.ApiKey ?? string.Empty, openAIOrganization: string.Empty));
-        
+
         var result = await api.Completions.CreateCompletionAsync(
             new CompletionRequest(
                 model: OpenAI_API.Models.Model.GPT4,
