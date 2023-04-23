@@ -153,6 +153,14 @@ public class Startup
         IServiceScopeFactory serviceScopeFactory,
         GPTDbContext dbContext)
     {
+        app.UseCors(builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithExposedHeaders(
+                CookieConstants.AuthToken)
+        );
+
         app.UseIpRateLimiting();
         app.UseSerilogRequestLogging();
 
