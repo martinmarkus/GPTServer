@@ -15,6 +15,7 @@ namespace GPTServer.Common.DomainLogic.Services;
 public class AuthService : IAuthService
 {
     private readonly IUserRepo _userRepo;
+    private readonly IApiKeyRepo _apiKeyRepo;
     private readonly IContextInfo _contextInfo;
 
     private readonly ILogService _logService;
@@ -29,7 +30,8 @@ public class AuthService : IAuthService
         IOptions<BaseOptions> baseOptions,
         ILogService logService,
         ISecureHashGeneratorService secureHashGeneratorService,
-        IAuthTokenService authTokenService)
+        IAuthTokenService authTokenService,
+        IApiKeyRepo apiKeyRepo)
     {
         _userRepo = userRepo;
         _contextInfo = contextInfo;
@@ -37,6 +39,7 @@ public class AuthService : IAuthService
         _logService = logService;
         _secureHashGeneratorService = secureHashGeneratorService;
         _authTokenService = authTokenService;
+        _apiKeyRepo = apiKeyRepo;
     }
 
     public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO dto)
@@ -127,6 +130,30 @@ public class AuthService : IAuthService
 
         return new()
         {
+            ResponseType = Core.Enums.ResponseType.Success
+        };
+    }
+
+    public async Task<UserResponseDTO> GetUserAsync()
+    {
+        var user = await _userRepo.GetByIdAsync(_contextInfo.UserId.HasValue ? _contextInfo.UserId.Value : default);
+        if (user is null)
+        {
+            return new()
+            {
+                ResponseType = Core.Enums.ResponseType.MissingParam
+            };
+        }
+
+        return new()
+        {
+            Email = user.Email,
+            ApiKeysResponseDTO = new()
+            {
+                Keys = await _apiKeyRepo.GetAllByUserIdAsync(
+                    _contextInfo.UserId.HasValue ? _contextInfo.UserId.Value : default)
+            },
+            ErrorMessage = string.Empty,
             ResponseType = Core.Enums.ResponseType.Success
         };
     }
