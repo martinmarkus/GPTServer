@@ -92,8 +92,10 @@ public class ApiKeyRepo : AsyncRepo<ApiKey>, IApiKeyRepo
             {
                 Key = x.Key,
                 KeyName = x.KeyName,
-                IsActive = x.IsActive
+                IsActive = x.IsActive,
+                CreationDate = x.CreationDate
             })
+            ?.OrderByDescending(x => x.CreationDate)
             ?.ToListAsync();
 
     public async Task<ApiKey> GetByApiKeyAsync(Guid? userId, string apiKey) =>
