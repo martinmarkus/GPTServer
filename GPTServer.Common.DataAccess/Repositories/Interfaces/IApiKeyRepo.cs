@@ -10,5 +10,5 @@ public interface IApiKeyRepo : IAsyncRepo<ApiKey>
     Task<IReadOnlyList<ApiKeyResponseDTO>> GetAllByUserIdAsync(Guid? userId);
     Task<ApiKey> GetByApiKeyAsync(Guid? userId, string apiKey);
     Task ResetActiveKeyStateAsync(Guid? userId);
-    Task SelectNewActiveKeyAsync(Guid? userId, string apiKey);
+    Task SelectNewActiveKeyAsync(Guid? userId, Guid id);
 }

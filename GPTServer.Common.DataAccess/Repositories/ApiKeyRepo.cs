@@ -29,10 +29,8 @@ public class ApiKeyRepo : AsyncRepo<ApiKey>, IApiKeyRepo
         }
     }
 
-    public async Task SelectNewActiveKeyAsync(Guid? userId, string apiKey)
+    public async Task SelectNewActiveKeyAsync(Guid? userId, Guid id)
     {
-        apiKey = apiKey?.Trim() ?? string.Empty;
-
         // INFO: Get the single active key
         var activeKeys = await _dbContext.ApiKeys
             .Where(x =>
@@ -43,7 +41,7 @@ public class ApiKeyRepo : AsyncRepo<ApiKey>, IApiKeyRepo
 
         // INFO: No active key or the active key did not change
         if (activeKeys is null
-            || activeKeys.Any(key => string.Equals(key.Key.Trim(), apiKey.Trim(), StringComparison.OrdinalIgnoreCase)))
+            || activeKeys.Any(key => key.Id == id))
         {
             return;
         }
@@ -60,7 +58,7 @@ public class ApiKeyRepo : AsyncRepo<ApiKey>, IApiKeyRepo
                .FirstOrDefaultAsync(x =>
                    !x.IsDeleted
                    && x.UserId == userId.Value
-                   && string.Equals(x.Key.Trim(), apiKey.Trim()));
+                   && x.Id == id);
 
             if (newActiveKey is null)
             {
@@ -90,6 +88,7 @@ public class ApiKeyRepo : AsyncRepo<ApiKey>, IApiKeyRepo
             )
             ?.Select(x => new ApiKeyResponseDTO()
             {
+                Id = x.Id,
                 Key = x.Key,
                 KeyName = x.KeyName,
                 IsActive = x.IsActive,

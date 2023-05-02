@@ -30,8 +30,8 @@ public class GPTController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<ApiKeysResponseDTO> AddApiKeyAsync(ApiKeyRequestDTO dto) =>
-    await _gptService.AddActiveApiKeyAsync(dto);
+    public async Task<ApiKeysResponseDTO> AddOrUpdateActiveApiKeyAsync(ApiKeyRequestDTO dto) =>
+    await _gptService.AddOrUpdateActiveApiKeyAsync(dto);
 
     [HttpPost]
     [Authorize]

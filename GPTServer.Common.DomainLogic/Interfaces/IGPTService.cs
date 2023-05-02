@@ -8,7 +8,7 @@ public interface IGPTService
 {
     Task<GPTAnswerResponseDTO> GetGPTAnswerAsync(GPTQuestionRequestDTO @params);
     Task<ApiKeysResponseDTO> GetOwnApiKeysAsync();
-    Task<ApiKeysResponseDTO> AddActiveApiKeyAsync(ApiKeyRequestDTO dto);
+    Task<ApiKeysResponseDTO> AddOrUpdateActiveApiKeyAsync(ApiKeyRequestDTO dto);
     Task<ApiKeysResponseDTO> RemoveApiKeyAsync(ApiKeyRequestDTO dto);
     Task<ApiKeysResponseDTO> SetActiveApiKeyAsync(ApiKeyRequestDTO dto);
 }

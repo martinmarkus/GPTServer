@@ -132,12 +132,12 @@ public class GPTService : IGPTService
             };
         }
 
-        await _apiKeyRepo.SelectNewActiveKeyAsync(_contextInfo.UserId, dto.ApiKey.Trim());
+        await _apiKeyRepo.SelectNewActiveKeyAsync(_contextInfo.UserId, dto.Id);
 
         return await GetOwnApiKeysAsync();
     }
 
-    public async Task<ApiKeysResponseDTO> AddActiveApiKeyAsync(ApiKeyRequestDTO dto)
+    public async Task<ApiKeysResponseDTO> AddOrUpdateActiveApiKeyAsync(ApiKeyRequestDTO dto)
     {
         if (dto is null || string.IsNullOrEmpty(dto.ApiKey))
         {
@@ -147,24 +147,25 @@ public class GPTService : IGPTService
             };
         }
 
-        var existingKey = await _apiKeyRepo.GetByApiKeyAsync(
-            _contextInfo.UserId.HasValue ? _contextInfo.UserId.Value : default,
-            dto.ApiKey);
+        var existingKey = await _apiKeyRepo.GetByIdAsync(dto.Id);
 
         if (existingKey is not null)
         {
-            return new()
-            {
-                ResponseType = Core.Enums.ResponseType.Conflict,
-            };
+            existingKey.IsActive = true;
+            existingKey.KeyName = dto.ApiKeyName ?? string.Empty;
+            existingKey.Key = dto.ApiKey ?? string.Empty;
+
+            await _apiKeyRepo.UpdateAsync(existingKey);
+
+            return await GetOwnApiKeysAsync();
         }
 
         await _apiKeyRepo.ResetActiveKeyStateAsync(_contextInfo.UserId);
 
         await _apiKeyRepo.AddAsync(new Core.Models.ApiKey()
         {
-            Key = dto.ApiKey,
-            KeyName = dto.ApiKeyName,
+            Key = dto.ApiKey ?? string.Empty,
+            KeyName = dto.ApiKeyName ?? string.Empty,
             UserId = _contextInfo.UserId.HasValue ? _contextInfo.UserId.Value : default,
             IsActive = true // INFO: New key will be active automatically
         });
