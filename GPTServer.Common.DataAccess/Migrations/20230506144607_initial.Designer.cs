@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GPTServer.Common.DataAccess.Migrations
 {
     [DbContext(typeof(GPTDbContext))]
-    [Migration("20230422210655_initial")]
+    [Migration("20230506144607_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -253,6 +253,22 @@ namespace GPTServer.Common.DataAccess.Migrations
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("IsDeleted", "Id"), false);
 
                     b.ToTable("users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("21a2b3df-0553-4d66-91ec-90cfbb285dd0"),
+                            CreationDate = new DateTime(2023, 5, 6, 16, 46, 7, 402, DateTimeKind.Local).AddTicks(1648),
+                            Email = "teszt@aichatmester.hu",
+                            HasExtensionPermission = true,
+                            IsDeleted = false,
+                            LastAuthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastAuthRoutingEnv = "ChatGPTExtension",
+                            PasswordHash = "M+QCWZJLLRFCKU0V/PUERW4F21H8V3DTTJTPDDXVLGA=",
+                            PasswordSalt = "SDA6HQ+8CYIJ+9OM23GM9KJDVGYOIP+TJ9SSAAN9TWM09PXVPINP/OL38JDIPRQQHAKXWONR1TESEM05XTRLPKRBY2QBSW/1IXIFMGWP91HPIQP0F2A1WHGQHTMCX10W",
+                            UniqueId = "c95aff8f-3fff-4b3e-a8f6-08dee0dc7c3a",
+                            UserAgent = ""
+                        });
                 });
 
             modelBuilder.Entity("GPTServer.Common.Core.Models.ApiKey", b =>

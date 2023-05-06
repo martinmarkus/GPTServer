@@ -1,4 +1,5 @@
-﻿using GPTServer.Common.Core.Models;
+﻿using GPTServer.Common.Core.Constants;
+using GPTServer.Common.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GPTServer.Common.DataAccess.Extensions
@@ -7,11 +8,20 @@ namespace GPTServer.Common.DataAccess.Extensions
     {
         public static void AddInitialData(this ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().HasData(
+                new User()
+                {
+                    Email = "teszt@aichatmester.hu",
+                    PasswordHash = "M+QCWZJLLRFCKU0V/PUERW4F21H8V3DTTJTPDDXVLGA=",
+                    PasswordSalt = "SDA6HQ+8CYIJ+9OM23GM9KJDVGYOIP+TJ9SSAAN9TWM09PXVPINP/OL38JDIPRQQHAKXWONR1TESEM05XTRLPKRBY2QBSW/1IXIFMGWP91HPIQP0F2A1WHGQHTMCX10W",
+                    HasExtensionPermission = true,
+                    LastAuthRoutingEnv = RoutingEnvironmentConstants.ChatGPTExtension,
+                    UniqueId = Guid.NewGuid().ToString()
+				});
         }
 
         public static void AddTestData(this ModelBuilder modelBuilder)
         {
-
         }
 
         public static void DefineIndexes(this ModelBuilder modelBuilder)

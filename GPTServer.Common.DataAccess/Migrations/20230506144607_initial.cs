@@ -129,6 +129,11 @@ namespace GPTServer.Common.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "users",
+                columns: new[] { "Id", "CreationDate", "Email", "HasExtensionPermission", "IsDeleted", "LastAuthDate", "LastAuthRoutingEnv", "PasswordHash", "PasswordSalt", "UniqueId", "UserAgent" },
+                values: new object[] { new Guid("21a2b3df-0553-4d66-91ec-90cfbb285dd0"), new DateTime(2023, 5, 6, 16, 46, 7, 402, DateTimeKind.Local).AddTicks(1648), "teszt@aichatmester.hu", true, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "ChatGPTExtension", "M+QCWZJLLRFCKU0V/PUERW4F21H8V3DTTJTPDDXVLGA=", "SDA6HQ+8CYIJ+9OM23GM9KJDVGYOIP+TJ9SSAAN9TWM09PXVPINP/OL38JDIPRQQHAKXWONR1TESEM05XTRLPKRBY2QBSW/1IXIFMGWP91HPIQP0F2A1WHGQHTMCX10W", "c95aff8f-3fff-4b3e-a8f6-08dee0dc7c3a", "" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_api_keys_IsDeleted_Id",
                 table: "api_keys",
