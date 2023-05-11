@@ -132,7 +132,9 @@ public class GPTService : IGPTService
             };
         }
 
-        await _apiKeyRepo.SelectNewActiveKeyAsync(_contextInfo.UserId, dto.Id.HasValue ? dto.Id.Value : default);
+        bool isGuid = Guid.TryParse(dto.Id, out Guid id);
+
+        await _apiKeyRepo.SelectNewActiveKeyAsync(_contextInfo.UserId, isGuid ? id : default);
 
         return await GetOwnApiKeysAsync();
     }
@@ -147,7 +149,9 @@ public class GPTService : IGPTService
             };
         }
 
-        var existingKey = await _apiKeyRepo.GetByIdAsync(dto.Id.HasValue ? dto.Id.Value : default);
+        bool isGuid = Guid.TryParse(dto.Id, out Guid id);
+
+        var existingKey = await _apiKeyRepo.GetByIdAsync(isGuid ? id : default);
 
         if (existingKey is not null)
         {
